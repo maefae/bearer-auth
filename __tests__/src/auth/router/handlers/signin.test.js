@@ -1,20 +1,19 @@
-'use strict';
+"use strict";
 
 process.env.SECRET = "TEST_SECRET";
 
-const { db, users } = require('../../../../../src/auth/models');
-const { handleSignin } = require('../../../../../src/auth/router/handlers.js');
+const { db, users } = require("../../../../../src/auth/models");
+const { handleSignin } = require("../../../../../src/auth/router/handlers.js");
 
 beforeAll(async () => {
   await db.sync();
-  await users.create({ username: 'test', password: 'test' });
+  await users.create({ username: "test", password: "test" });
 });
 afterAll(async () => {
   await db.drop();
 });
 
-describe('Testing the signin handler', () => {
-
+describe("Testing the signin handler", () => {
   const res = {
     send: jest.fn(() => res),
     status: jest.fn(() => res),
@@ -22,10 +21,10 @@ describe('Testing the signin handler', () => {
   };
   const next = jest.fn();
 
-  test('Should find a User when a `user` is present on the request', async () => {
+  test("Should find a User when a `user` is present on the request", async () => {
     let req = {
-      user: await users.findOne({ where: { username: 'test' } }),
-    }
+      user: await users.findOne({ where: { username: "test" } }),
+    };
 
     await handleSignin(req, res, next);
     expect(res.status).toHaveBeenCalledWith(200);
@@ -41,7 +40,7 @@ describe('Testing the signin handler', () => {
     );
   });
 
-  test('Should trigger error handler when no user is present on the request', async () => {
+  test("Should trigger error handler when no user is present on the request", async () => {
     let req = {};
     jest.clearAllMocks();
 
